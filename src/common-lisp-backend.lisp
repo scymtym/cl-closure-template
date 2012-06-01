@@ -64,10 +64,12 @@
         (export symbol package)
         (proclaim (list 'ftype 'function symbol))
         (setf (symbol-function symbol)
-              (named-lambda template-handler (&optional env)
-                (let ((*print-pretty* nil))
-                  (with-output-to-string (out)
-                    (ttable-call-template ttable name env out)))))))))
+              (named-lambda template-handler (&optional env out)
+                (if out
+                    (ttable-call-template ttable name env out)
+                    (let ((*print-pretty* nil))
+                      (with-output-to-string (out)
+                        (ttable-call-template ttable name env out))))))))))
 
 (defun ttable-sync-package (ttable package)
   (ttable-clean-package ttable package)
